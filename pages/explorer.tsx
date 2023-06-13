@@ -12,7 +12,28 @@ const Home: NextPage = () => {
     <div>
       {!ensName.isLoading && (
         <>
-          <div>{ensName.data}</div>
+          <div>ENS name: {ensName.data}</div>
+          <button
+            onClick={() => {
+              const options = {
+                method: 'GET',
+                headers: {
+                  authorization:
+                    `Bearer ${process.env.NEXT_PUBLIC_BERYX_TOKEN}`,
+                },
+              }
+
+              fetch(
+                'https://api.zondax.ch/fil/data/v1/mainnet/account/balance/f1trlskifqqifochzaax4fyxdpe43lnvjyaadu6cq',
+                options
+              )
+                .then((response) => response.json())
+                .then((response) => console.log(response))
+                .catch((err) => console.error(err))
+            }}
+          >
+            Get Balance
+          </button>
         </>
       )}
     </div>
