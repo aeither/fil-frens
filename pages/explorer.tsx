@@ -14,7 +14,7 @@ const Home: NextPage = () => {
         <>
           <div>ENS name: {ensName.data}</div>
           <button
-            onClick={() => {
+            onClick={async () => {
               const options = {
                 method: 'GET',
                 headers: {
@@ -22,6 +22,7 @@ const Home: NextPage = () => {
                     `Bearer ${process.env.NEXT_PUBLIC_BERYX_TOKEN}`,
                 },
               }
+              console.log("🚀 ~ file: explorer.tsx:25 ~ onClick={ ~ options:", options)
 
               fetch(
                 'https://api.zondax.ch/fil/data/v1/mainnet/account/balance/f1trlskifqqifochzaax4fyxdpe43lnvjyaadu6cq',
