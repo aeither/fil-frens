@@ -3,14 +3,19 @@ import { useState } from "react";
 import { useEnsName, useSigner } from "wagmi";
 import { Database } from "@tableland/sdk";
 import { ethers } from "ethers";
-import { ethAddressFromDelegated } from "@glif/filecoin-address";
+import {
+  ethAddressFromDelegated,
+  newDelegatedEthAddress,
+} from "@glif/filecoin-address";
+
+// f410fudhxtcaw2s43tbtlkmyo5jdkda4c6ji6bmdo3yy ens
 
 const Home: NextPage = () => {
-  const [targetAddress, setTargetAddress] = useState();
   const [inputValue, setInputValue] = useState("");
+  const [ethAddress, setEthAddress] = useState("");
 
   const ensName = useEnsName({
-    address: "0xA0Cf798816D4b9b9866b5330EEa46a18382f251e",
+    address: ethAddress as `0x${string}`,
   });
   const { data: signer } = useSigner();
 
@@ -21,33 +26,46 @@ const Home: NextPage = () => {
   };
 
   const handleChange = (e: any) => {
-    setInputValue(e.target.value);
+    if (e.target.value) {
+      setInputValue(e.target.value);
+
+      const _filAddress = getEthAddress(e.target.value);
+      setEthAddress(_filAddress);
+    }
   };
 
-  const getEthAddress = () => {
-    const ethAddress = ethAddressFromDelegated(
-      "f410f2oekwcmo2pueydmaq53eic2i62crtbeyuzx2gmy"
+  const getFilAddress = () => {
+    const filAddress = newDelegatedEthAddress(
+      "0xA0Cf798816D4b9b9866b5330EEa46a18382f251e"
     );
+    console.log(filAddress.toString());
+    return filAddress.toString();
+  };
+
+  const getEthAddress = (address: string) => {
+    const ethAddress = ethAddressFromDelegated(address);
     console.log(ethAddress.toString());
+    return ethAddress.toString();
   };
 
   return (
     <div className="flex flex-row h-[calc(100vh-24px-32px-8px)] items-center justify-center">
       <div className="container">
         <div className="flex w-full h-full flex-col items-center gap-2">
-          <h1 className="text-3xl font-bold underline">Hello world!</h1>
+          <h1 className="text-3xl font-bold underline">Find Fil Frens</h1>
+            <input
+              type="text"
+              value={inputValue}
+              onChange={handleChange}
+              className="input input-bordered input-info w-full max-w-xs" 
+              />
+              <div>
+            <p>Fil address: {inputValue}</p>
+            <p>Eth address: {ethAddress}</p>
+          </div>
           {!ensName.isLoading && (
             <>
               <div>ENS name: {ensName.data}</div>
-              <div>
-                <input
-                  type="text"
-                  value={inputValue}
-                  onChange={handleChange}
-                  className="input input-bordered w-full max-w-xs"
-                />
-                <p>Input value: {inputValue}</p>
-              </div>
               <button
                 className="btn btn-primary"
                 onClick={async () => {
@@ -57,10 +75,7 @@ const Home: NextPage = () => {
                       authorization: `Bearer ${process.env.NEXT_PUBLIC_BERYX_TOKEN}`,
                     },
                   };
-                  console.log(
-                    "🚀 ~ file: explorer.tsx:25 ~ onClick={ ~ options:",
-                    options
-                  );
+
                   //  0xFa038D5376fd1dcfC32F0A0803520d3C4C0AA294
                   // f410f7iby2u3w7uo47qzpbieaguqnhrgaviuu2xnskmq (xfiles.fil)
                   // f1trlskifqqifochzaax4fyxdpe43lnvjyaadu6cq get balance
@@ -85,9 +100,10 @@ const Home: NextPage = () => {
                     .catch((err) => console.error(err));
                 }}
               >
-                Get Balance
+                More Info
               </button>
-              <button onClick={getEthAddress}>get address</button>
+              {/* <button onClick={getEthAddress}>get address</button>
+              <button onClick={getFilAddress}>get getFilAddress</button> */}
             </>
           )}
         </div>
