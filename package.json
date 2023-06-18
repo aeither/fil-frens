@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@glif/filecoin-address": "^2.0.43",
     "@pushprotocol/restapi": "^1.3.3",
     "@pushprotocol/socket": "^0.5.1",
     "@rainbow-me/rainbowkit": "0.12.14",
@@ -27,6 +28,7 @@
     "@types/react": "^18.2.6",
     "@types/styled-components": "^5.1.26",
     "autoprefixer": "^10.4.14",
+    "daisyui": "^3.1.1",
     "eslint": "^8.15.0",
     "eslint-config-next": "^13.4.3",
     "postcss": "^8.4.24",
